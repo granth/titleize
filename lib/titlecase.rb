@@ -2,16 +2,7 @@ module Titlecase
   SMALL_WORDS = %w{a an and as at but by en for if in of on or the to v v. via vs vs.}
 
   def titlecase(title)
-    phrases = title.split(/([:.;?!] )/)
-
-    # rejoin phrases that were split on the '.' from a small word
-    phrases[0..-3].each_with_index do |phrase, index|
-      if SMALL_WORDS.include?(phrase.split.last.downcase + ".") && phrases[index + 1] == ". "
-        phrases[index] += phrases.slice!(index + 1, index + 2).join
-      end
-    end
-
-    phrases.map do |phrase|
+    phrases(title).map do |phrase|
       unless phrase[/[[:alpha:]]/]
         phrase
       else
@@ -36,6 +27,21 @@ module Titlecase
           end
         end.join(" ")
       end
-    end.join
+    end.join(" ")
+  end
+
+  def phrases(title)
+    phrases = title.scan(/.+?(?:[:.;?!] |$)/).map {|phrase| phrase.strip }
+
+    # rejoin phrases that were split on the '.' from a small word
+    if phrases.size > 1
+      phrases[0..-1].each_with_index do |phrase, index|
+        if SMALL_WORDS.include?(phrase.split.last.downcase)
+          phrases[index] << " " + phrases.slice!(index + 1)
+        end
+      end
+    end
+
+    phrases
   end
 end

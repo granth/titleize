@@ -3,6 +3,44 @@ require File.join(File.dirname(__FILE__), "..", "lib/titlecase.rb")
 SMALL_WORDS = %w{a an and as at but by en for if in of on or the to v v. via vs vs.}
 
 describe Titlecase do
+  describe "phrases" do
+    it "should return an array" do
+      phrases("a little sentence").should be_an_instance_of(Array)
+    end
+
+    it "should split on colons" do
+      phrases("this: a subphrase").should == ["this:", "a subphrase"]
+    end
+
+    it "should split on semi-colons" do
+      phrases("this; that").should == ["this;", "that"]
+    end
+
+    it "should split on question marks" do
+      phrases("this? that").should == ["this?", "that"]
+    end
+
+    it "should split on periods" do
+      phrases("this. that.").should == ["this.", "that."]
+    end
+
+    it "should split on exclamation marks" do
+      phrases("headache! yes").should == ["headache!", "yes"]
+    end
+
+    it "should rejoin into the original string" do
+      title = "happy: not sad; pushing! laughing? ok."
+      phrases(title).join(" ").should == title
+    end
+
+    it "should not get confused by small words with punctuation" do
+      phrases("this vs. that").should == ["this vs. that"]
+      phrases("this vs. that. no").should == ["this vs. that.", "no"]
+      phrases("this: that vs. him. no. why?").should ==
+        ["this:", "that vs. him.", "no.", "why?"]
+    end
+  end
+
   it "should return a string" do
     titlecase("this").should be_an_instance_of(String)
   end
