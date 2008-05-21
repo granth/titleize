@@ -12,7 +12,7 @@ module Titlecase
     end
 
     phrases.map do |phrase|
-      unless phrase =~ /[[:alpha:]]/
+      unless phrase[/[[:alpha:]]/]
         phrase
       else
         words = phrase.split
