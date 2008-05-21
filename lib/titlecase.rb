@@ -3,11 +3,14 @@ module Titlecase
 
   def titlecase(title)
     phrases = title.split(/([:.;?!] )/)
+
+    # rejoin phrases that were split on the '.' from a small word
     phrases[0..-3].each_with_index do |phrase, index|
       if SMALL_WORDS.include?(phrase.split.last.downcase + ".") && phrases[index + 1] == ". "
         phrases[index] += phrases.slice!(index + 1, index + 2).join
       end
     end
+
     phrases.map do |phrase|
       unless phrase =~ /[[:alpha:]]/
         phrase
