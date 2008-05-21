@@ -24,6 +24,11 @@ describe "titlecase" do
   it "should capitalize a small word if it is the first word" do
     SMALL_WORDS.each do |word|
       titlecase("#{word} is small").should == "#{word.capitalize} Is Small"
+      titlecase("after: #{word} ok").should == "After: #{word.capitalize} Ok"
+      titlecase("after; #{word} ok").should == "After; #{word.capitalize} Ok"
+      titlecase("after. #{word} ok").should == "After. #{word.capitalize} Ok"
+      titlecase("after? #{word} ok").should == "After? #{word.capitalize} Ok"
+      titlecase("after! #{word} ok").should == "After! #{word.capitalize} Ok"
     end
   end
 
