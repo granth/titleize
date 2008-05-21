@@ -92,6 +92,9 @@ describe "titlecase" do
       %{"Nothing to Be Afraid of?"} => %{"Nothing to Be Afraid Of?"},
       %{"Nothing to Be Afraid Of?"} => %{"Nothing to Be Afraid Of?"},
       %{a thing} => %{A Thing},
+
+      %{'Gruber on OmniFocus and Vapo(u)rware'} =>
+      %{'Gruber on OmniFocus and Vapo(u)rware'},
     }.each do |before, after|
       titlecase(before).should == after
     end
