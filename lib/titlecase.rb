@@ -1,6 +1,8 @@
 module Titlecase
   SMALL_WORDS = %w{a an and as at but by en for if in of on or the to v v. via vs vs.}
 
+  extend self
+
   def titlecase(title)
     phrases(title).map do |phrase|
       unless phrase[/[[:alpha:]]/]
@@ -43,5 +45,11 @@ module Titlecase
     end
 
     phrases
+  end
+end
+
+class String
+  def titlecase
+    Titlecase.titlecase(self)
   end
 end

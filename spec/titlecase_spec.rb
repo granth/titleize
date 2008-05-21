@@ -141,4 +141,18 @@ describe Titlecase do
       end
     end
   end
+
+  it "should have titlecase as a singleton method" do
+    Titlecase.singleton_methods.should include("titlecase")
+  end
+end
+
+describe String do
+  it "should have a titlecase method" do
+    String.instance_methods.should include("titlecase")
+  end
+
+  it "should work" do
+    "this is a test".titlecase.should == "This Is a Test"
+  end
 end
