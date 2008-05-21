@@ -1,6 +1,8 @@
 require File.join(File.dirname(__FILE__), "..", "lib/titlecase.rb")
 
-describe "titlecase" do
+SMALL_WORDS = %w{a an and as at but by en for if in of on or the to v v. via vs vs.}
+
+describe Titlecase do
   it "should return a string" do
     titlecase("this").should be_an_instance_of(String)
   end
