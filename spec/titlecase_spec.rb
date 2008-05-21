@@ -15,7 +15,7 @@ describe "titlecase" do
     end
   end
 
-  it "should downcase a small word if it is capitilized" do
+  it "should downcase a small word if it is capitalized" do
     SMALL_WORDS.each do |word|
       titlecase("first #{word.capitalize} last").should == "First #{word} Last"
     end
@@ -42,7 +42,7 @@ describe "titlecase" do
     titlecase("the SEC's decision").should == "The SEC's Decision"
   end
 
-  it "should not capitilize words with dots" do 
+  it "should not capitalize words with dots" do 
     titlecase("del.icio.us web site").should == "del.icio.us Web Site"
   end
 
@@ -51,7 +51,7 @@ describe "titlecase" do
     titlecase("ends with 'quotation.'").should == "Ends With 'Quotation.'"
   end
 
-  it "should not capitilize words that have a lowercase first letter" do 
+  it "should not capitalize words that have a lowercase first letter" do 
     titlecase("iTunes").should == "iTunes"
   end
 
