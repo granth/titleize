@@ -46,10 +46,6 @@ module Titlecase
 
     phrases
   end
-
-  def rails_titlecase(title)
-    titlecase(Inflector.humanize(Inflector.underscore(title)))
-  end
 end
 
 class String
@@ -64,7 +60,7 @@ if defined? Inflector
     extend self
 
     def titlecase(title)
-      Titlecase.rails_titlecase(title)
+      Titlecase.titlecase(Inflector.humanize(Inflector.underscore(title)))
     end
     alias_method :titleize, :titlecase
   end

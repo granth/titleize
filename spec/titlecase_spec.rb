@@ -146,7 +146,13 @@ describe Titlecase do
     end
   end
 
-  describe "rails_titlecase" do
+  it "should have titlecase as a singleton method" do
+    Titlecase.singleton_methods.should include("titlecase")
+  end
+end
+
+describe Inflector do
+  describe "titlecase" do
     before(:each) do
       @title = "active_record and ActiveResource"
     end
@@ -156,11 +162,13 @@ describe Titlecase do
       humanized_title = "Active record and active resource"
       Inflector.should_receive(:underscore).with(@title).and_return(underscored_title)
       Inflector.should_receive(:humanize).with(underscored_title).and_return(humanized_title)
-      rails_titlecase(@title).should == "Active Record and Active Resource"
+      titlecase(@title).should == "Active Record and Active Resource"
     end
 
     it "should replace Inflector.titlecase" do
-      Titlecase.should_receive(:rails_titlecase).with(@title)
+      Titlecase.should_receive(:titlecase).with(@title)
+      Inflector.stub!(:underscore).and_return(@title)
+      Inflector.stub!(:humanize).and_return(@title)
       Inflector.titlecase(@title)
     end
 
@@ -170,10 +178,6 @@ describe Titlecase do
       Inflector.stub!(:titleize).and_return("title")
       Inflector.titleize("this").should == Inflector.titlecase("this")
     end
-  end
-
-  it "should have titlecase as a singleton method" do
-    Titlecase.singleton_methods.should include("titlecase")
   end
 end
 
