@@ -142,6 +142,21 @@ describe Titlecase do
     end
   end
 
+  describe "rails_titlecase" do
+    before(:all) do
+      Inflector = mock("Inflector")
+    end
+
+    it "should call humanize and underscore like the default in Rails" do
+      title = "active_record and ActiveResource"
+      underscored_title = "active_record and active_resource"
+      humanized_title = "Active record and active resource"
+      Inflector.should_receive(:underscore).with(title).and_return(underscored_title)
+      Inflector.should_receive(:humanize).with(underscored_title).and_return(humanized_title)
+      rails_titlecase(title).should == "Active Record and Active Resource"
+    end
+  end
+
   it "should have titlecase as a singleton method" do
     Titlecase.singleton_methods.should include("titlecase")
   end

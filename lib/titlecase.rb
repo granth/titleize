@@ -46,11 +46,21 @@ module Titlecase
 
     phrases
   end
+
+  def rails_titlecase(title)
+    titlecase(Inflector.humanize(Inflector.underscore(title)))
+  end
 end
 
 class String
-  def titlecase
-    Titlecase.titlecase(self)
+  if defined? Rails
+    def titlecase
+      Titlecase.rails_titlecase(self)
+    end
+  else
+    def titlecase
+      Titlecase.titlecase(self)
+    end
   end
   alias_method :titleize, :titlecase
 end
