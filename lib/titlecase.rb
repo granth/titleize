@@ -8,12 +8,11 @@ module Titlecase
   # Capitalizes most words to create a nicer looking title string.
   #
   # The list of "small words" which are not capped comes from
-  # the New York Times Manual of Style, plus 'vs' and 'v'. 
+  # the New York Times Manual of Style, plus 'vs' and 'v'.
   #
   #   "notes on a scandal" # => "Notes on a Scandal"
   #   "the good german"    # => "The Good German"
   def titlecase(title)
-
     phrases(title).map do |phrase|
       words = phrase.split
       words.map do |word|
@@ -62,7 +61,7 @@ class String
   # Capitalizes most words to create a nicer looking title string.
   #
   # The list of "small words" which are not capped comes from
-  # the New York Times Manual of Style, plus 'vs' and 'v'. 
+  # the New York Times Manual of Style, plus 'vs' and 'v'.
   #
   # titlecase is also aliased as titleize.
   #
@@ -81,10 +80,10 @@ if defined? Inflector
     # Capitalizes most words to create a nicer looking title string.
     #
     # The list of "small words" which are not capped comes from
-    # the New York Times Manual of Style, plus 'vs' and 'v'. 
+    # the New York Times Manual of Style, plus 'vs' and 'v'.
     #
     # This replaces the default Rails titlecase. Like the default, it uses
-    # Inflector.underscore and Inflector.humanize to convert 
+    # Inflector.underscore and Inflector.humanize to convert
     # underscored_names and CamelCaseNames to a more human form.
     #
     # titlecase is also aliased as titleize.
