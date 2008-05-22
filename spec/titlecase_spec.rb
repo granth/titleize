@@ -1,3 +1,7 @@
+module Inflector
+  #stub
+end
+
 require File.join(File.dirname(__FILE__), "..", "lib/titlecase.rb")
 
 SMALL_WORDS = %w{a an and as at but by en for if in of on or the to v v. via vs vs.}
@@ -143,17 +147,28 @@ describe Titlecase do
   end
 
   describe "rails_titlecase" do
-    before(:all) do
-      Inflector = mock("Inflector")
+    before(:each) do
+      @title = "active_record and ActiveResource"
     end
 
     it "should call humanize and underscore like the default in Rails" do
-      title = "active_record and ActiveResource"
       underscored_title = "active_record and active_resource"
       humanized_title = "Active record and active resource"
-      Inflector.should_receive(:underscore).with(title).and_return(underscored_title)
+      Inflector.should_receive(:underscore).with(@title).and_return(underscored_title)
       Inflector.should_receive(:humanize).with(underscored_title).and_return(humanized_title)
-      rails_titlecase(title).should == "Active Record and Active Resource"
+      rails_titlecase(@title).should == "Active Record and Active Resource"
+    end
+
+    it "should replace Inflector.titlecase" do
+      Titlecase.should_receive(:rails_titlecase).with(@title)
+      Inflector.titlecase(@title)
+    end
+
+    it "should be aliased as titleize" do
+      Inflector.singleton_methods.should include("titleize")
+      Inflector.stub!(:titlecase).and_return("title")
+      Inflector.stub!(:titleize).and_return("title")
+      Inflector.titleize("this").should == Inflector.titlecase("this")
     end
   end
 

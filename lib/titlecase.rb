@@ -53,14 +53,19 @@ module Titlecase
 end
 
 class String
-  if defined? Rails
-    def titlecase
-      Titlecase.rails_titlecase(self)
-    end
-  else
-    def titlecase
-      Titlecase.titlecase(self)
-    end
+  def titlecase
+    Titlecase.titlecase(self)
   end
   alias_method :titleize, :titlecase
+end
+
+if defined? Inflector
+  module Inflector
+    extend self
+
+    def titlecase(title)
+      Titlecase.rails_titlecase(title)
+    end
+    alias_method :titleize, :titlecase
+  end
 end
