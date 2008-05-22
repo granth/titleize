@@ -2,7 +2,7 @@ module Inflector
   #stub
 end
 
-require File.join(File.dirname(__FILE__), "..", "lib/titlecase.rb")
+require File.dirname(__FILE__) + "/../spec_helper.rb"
 
 SMALL_WORDS = %w{a an and as at but by en for if in of on or the to v v. via vs vs.}
 
