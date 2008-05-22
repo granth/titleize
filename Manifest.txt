@@ -3,4 +3,6 @@ Manifest.txt
 README.txt
 Rakefile
 lib/titlecase.rb
-spec/titlecase_spec.rb
+spec/spec.opts
+spec/spec/titlecase_spec.rb
+spec/spec_helper.rb
