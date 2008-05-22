@@ -52,4 +52,5 @@ class String
   def titlecase
     Titlecase.titlecase(self)
   end
+  alias_method :titleize, :titlecase
 end

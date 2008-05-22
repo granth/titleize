@@ -155,4 +155,10 @@ describe String do
   it "should work" do
     "this is a test".titlecase.should == "This Is a Test"
   end
+
+  it "should be aliased as #titleize" do
+    String.instance_methods.should include("titleize")
+    title = "this is a pile of testing text"
+    title.titleize.should == title.titlecase
+  end
 end
