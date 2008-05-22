@@ -5,30 +5,26 @@ module Titlecase
 
   def titlecase(title)
     phrases(title).map do |phrase|
-      unless phrase[/[[:alpha:]]/]
-        phrase
-      else
-        words = phrase.split
-        words.map do |word|
-          def word.capitalize
-            # like String#capitalize, but it starts with the first letter
-            self.sub(/[[:alpha:]].*/) {|subword| subword.capitalize}
-          end
+      words = phrase.split
+      words.map do |word|
+        def word.capitalize
+          # like String#capitalize, but it starts with the first letter
+          self.sub(/[[:alpha:]].*/) {|subword| subword.capitalize}
+        end
 
-          case word
-          when /[[:alpha:]]\.[[:alpha:]]/  # words with dots in, like "example.com"
-            word
-          when /^[[:alpha:]].*[[:upper:]]/ # non-first letter capitalized already
-            word
-          when words.first, words.last
-            word.capitalize
-          when *(SMALL_WORDS + SMALL_WORDS.map {|small| small.capitalize })
-            word.downcase
-          else
-            word.capitalize
-          end
-        end.join(" ")
-      end
+        case word
+        when /[[:alpha:]]\.[[:alpha:]]/  # words with dots in, like "example.com"
+          word
+        when /^[[:alpha:]].*[[:upper:]]/ # non-first letter capitalized already
+          word
+        when words.first, words.last
+          word.capitalize
+        when *(SMALL_WORDS + SMALL_WORDS.map {|small| small.capitalize })
+          word.downcase
+        else
+          word.capitalize
+        end
+      end.join(" ")
     end.join(" ")
   end
 
