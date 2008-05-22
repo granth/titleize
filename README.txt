@@ -1,23 +1,24 @@
-= Title Case
+= Titleize
 
 * http://rubyforge.org/projects/titleize/
 
 == DESCRIPTION:
 
-Adds String#titlecase for creating properly capitalized titles.
-It can be called as Titlecase.titlecase or "a string".titlecase.
+Adds String#titleize for creating properly capitalized titles.
+It can be called as Titleize.titleize or "a string".titleize. It is also
+aliased as titlecase.
 
 The list of "small words" which are not capped comes from the New York Times 
 Manual of Style, plus 'vs' and 'v'.
 
-If loaded in a Rails environment, it modifies Inflector.titlecase.
+If loaded in a Rails environment, it modifies Inflector.titleize.
 
 Based on TitleCase.pl by John Gruber.
 http://daringfireball.net/2008/05/title_case
 
 == SYNOPSIS:
 
-  "a lovely and talented title".titlecase # => "A Lovely and Talented Title"
+  "a lovely and talented title".titleize # => "A Lovely and Talented Title"
 
 == INSTALL:
 

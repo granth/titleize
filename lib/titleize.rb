@@ -1,8 +1,10 @@
-# Adds String#titlecase for creating properly capitalized titles.
-# It can be called as Titlecase.titlecase or "a string".titlecase.
+# Adds String#titleize for creating properly capitalized titles.
+# It can be called as Titleize.titleize or "a string".titleize.
 #
-# If loaded in a Rails environment, it modifies Inflector.titlecase.
-module Titlecase
+# titlecase is included as an alias for titleize.
+#
+# If loaded in a Rails environment, it modifies Inflector.titleize.
+module Titleize
   VERSION = '1.0.0'
   SMALL_WORDS = %w{a an and as at but by en for if in of on or the to v v. via vs vs.}
 
@@ -15,7 +17,7 @@ module Titlecase
   #
   #   "notes on a scandal" # => "Notes on a Scandal"
   #   "the good german"    # => "The Good German"
-  def titlecase(title)
+  def titleize(title)
     phrases(title).map do |phrase|
       words = phrase.split
       words.map do |word|
@@ -66,14 +68,14 @@ class String
   # The list of "small words" which are not capped comes from
   # the New York Times Manual of Style, plus 'vs' and 'v'.
   #
-  # titlecase is also aliased as titleize.
+  # titleize is also aliased as titlecase.
   #
   #   "notes on a scandal" # => "Notes on a Scandal"
   #   "the good german"    # => "The Good German"
-  def titlecase
-    Titlecase.titlecase(self)
+  def titleize
+    Titleize.titleize(self)
   end
-  alias_method :titleize, :titlecase
+  alias_method :titlecase, :titleize
 end
 
 if defined? Inflector
@@ -85,17 +87,17 @@ if defined? Inflector
     # The list of "small words" which are not capped comes from
     # the New York Times Manual of Style, plus 'vs' and 'v'.
     #
-    # This replaces the default Rails titlecase. Like the default, it uses
+    # This replaces the default Rails titleize. Like the default, it uses
     # Inflector.underscore and Inflector.humanize to convert
     # underscored_names and CamelCaseNames to a more human form.
     #
-    # titlecase is also aliased as titleize.
+    # titleize is also aliased as titlecase.
     #
     #   "notes on an active_record" # => "Notes on an Active Record"
     #   "the GoodGerman"            # => "The Good German"
-    def titlecase(title)
-      Titlecase.titlecase(Inflector.humanize(Inflector.underscore(title)))
+    def titleize(title)
+      Titleize.titleize(Inflector.humanize(Inflector.underscore(title)))
     end
-    alias_method :titleize, :titlecase
+    alias_method :titlecase, :titleize
   end
 end

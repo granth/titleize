@@ -6,7 +6,7 @@ require File.dirname(__FILE__) + "/../spec_helper.rb"
 
 SMALL_WORDS = %w{a an and as at but by en for if in of on or the to v v. via vs vs.}
 
-describe Titlecase do
+describe Titleize do
   describe "phrases" do
     it "should return an array" do
       phrases("a little sentence").should be_an_instance_of(Array)
@@ -45,59 +45,59 @@ describe Titlecase do
     end
   end
 
-  describe "titlecase" do
+  describe "titleize" do
     it "should return a string" do
-      titlecase("this").should be_an_instance_of(String)
+      titleize("this").should be_an_instance_of(String)
     end
 
     it "should capitalize the first letter of regular words" do
-      titlecase("cat beats monkey").should == "Cat Beats Monkey"
+      titleize("cat beats monkey").should == "Cat Beats Monkey"
     end
 
     it "should not capitalize small words" do
       SMALL_WORDS.each do |word|
-        titlecase("first #{word} last").should == "First #{word} Last"
+        titleize("first #{word} last").should == "First #{word} Last"
       end
     end
 
     it "should downcase a small word if it is capitalized" do
       SMALL_WORDS.each do |word|
-        titlecase("first #{word.capitalize} last").should == "First #{word} Last"
+        titleize("first #{word.capitalize} last").should == "First #{word} Last"
       end
     end
 
     it "should capitalize a small word if it is the first word" do
       SMALL_WORDS.each do |word|
-        titlecase("#{word} is small").should == "#{word.capitalize} Is Small"
-        titlecase("after: #{word} ok").should == "After: #{word.capitalize} Ok"
-        titlecase("after; #{word} ok").should == "After; #{word.capitalize} Ok"
-        titlecase("after. #{word} ok").should == "After. #{word.capitalize} Ok"
-        titlecase("after? #{word} ok").should == "After? #{word.capitalize} Ok"
-        titlecase("after! #{word} ok").should == "After! #{word.capitalize} Ok"
+        titleize("#{word} is small").should == "#{word.capitalize} Is Small"
+        titleize("after: #{word} ok").should == "After: #{word.capitalize} Ok"
+        titleize("after; #{word} ok").should == "After; #{word.capitalize} Ok"
+        titleize("after. #{word} ok").should == "After. #{word.capitalize} Ok"
+        titleize("after? #{word} ok").should == "After? #{word.capitalize} Ok"
+        titleize("after! #{word} ok").should == "After! #{word.capitalize} Ok"
       end
     end
 
     it "should capitalize a small word if it is the last word" do
       SMALL_WORDS.each do |word|
-        titlecase("small #{word}").should == "Small #{word.capitalize}"
+        titleize("small #{word}").should == "Small #{word.capitalize}"
       end
     end
 
     it "should not screw up acronyms" do
-      titlecase("the SEC's decision").should == "The SEC's Decision"
+      titleize("the SEC's decision").should == "The SEC's Decision"
     end
 
     it "should not capitalize words with dots" do 
-      titlecase("del.icio.us web site").should == "del.icio.us Web Site"
+      titleize("del.icio.us web site").should == "del.icio.us Web Site"
     end
 
     it "should not think a quotation mark makes a dot word" do
-      titlecase("'quoted.' yes.").should == "'Quoted.' Yes."
-      titlecase("ends with 'quotation.'").should == "Ends With 'Quotation.'"
+      titleize("'quoted.' yes.").should == "'Quoted.' Yes."
+      titleize("ends with 'quotation.'").should == "Ends With 'Quotation.'"
     end
 
     it "should not capitalize words that have a lowercase first letter" do 
-      titlecase("iTunes").should == "iTunes"
+      titleize("iTunes").should == "iTunes"
     end
 
     # http://daringfireball.net/projects/titlecase/examples-edge-cases
@@ -141,18 +141,18 @@ describe Titlecase do
         %{'Gruber on OmniFocus and Vapo(u)rware'} =>
         %{'Gruber on OmniFocus and Vapo(u)rware'},
       }.each do |before, after|
-        titlecase(before).should == after
+        titleize(before).should == after
       end
     end
   end
 
-  it "should have titlecase as a singleton method" do
-    Titlecase.singleton_methods.should include("titlecase")
+  it "should have titleize as a singleton method" do
+    Titleize.singleton_methods.should include("titleize")
   end
 end
 
 describe Inflector do
-  describe "titlecase" do
+  describe "titleize" do
     before(:each) do
       @title = "active_record and ActiveResource"
     end
@@ -162,37 +162,37 @@ describe Inflector do
       humanized_title = "Active record and active resource"
       Inflector.should_receive(:underscore).with(@title).and_return(underscored_title)
       Inflector.should_receive(:humanize).with(underscored_title).and_return(humanized_title)
-      titlecase(@title).should == "Active Record and Active Resource"
+      titleize(@title).should == "Active Record and Active Resource"
     end
 
-    it "should replace Inflector.titlecase" do
-      Titlecase.should_receive(:titlecase).with(@title)
+    it "should replace Inflector.titleize" do
+      Titleize.should_receive(:titleize).with(@title)
       Inflector.stub!(:underscore).and_return(@title)
       Inflector.stub!(:humanize).and_return(@title)
-      Inflector.titlecase(@title)
+      Inflector.titleize(@title)
     end
 
-    it "should be aliased as titleize" do
-      Inflector.singleton_methods.should include("titleize")
+    it "should be aliased as titlecase" do
+      Inflector.singleton_methods.should include("titlecase")
       Inflector.stub!(:titlecase).and_return("title")
       Inflector.stub!(:titleize).and_return("title")
-      Inflector.titleize("this").should == Inflector.titlecase("this")
+      Inflector.titlecase("this").should == Inflector.titleize("this")
     end
   end
 end
 
 describe String do
-  it "should have a titlecase method" do
-    String.instance_methods.should include("titlecase")
+  it "should have a titleize method" do
+    String.instance_methods.should include("titleize")
   end
 
   it "should work" do
-    "this is a test".titlecase.should == "This Is a Test"
+    "this is a test".titleize.should == "This Is a Test"
   end
 
-  it "should be aliased as #titleize" do
-    String.instance_methods.should include("titleize")
+  it "should be aliased as #titlecase" do
+    String.instance_methods.should include("titlecase")
     title = "this is a pile of testing text"
-    title.titleize.should == title.titlecase
+    title.titlecase.should == title.titleize
   end
 end

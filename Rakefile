@@ -2,10 +2,10 @@
 
 require 'rubygems'
 require 'hoe'
-require './lib/titlecase.rb'
+require './lib/titleize.rb'
 require 'spec/rake/spectask'
 
-Hoe.new('titleize', Titlecase::VERSION) do |p|
+Hoe.new('titleize', Titleize::VERSION) do |p|
   p.developer("Grant Hollingworth", "grant@antiflux.org")
   p.remote_rdoc_dir = '' # Release to root
 end
