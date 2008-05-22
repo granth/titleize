@@ -27,7 +27,7 @@ http://daringfireball.net/2008/05/title_case
 
 (The MIT License)
 
-Copyright (c) 2008 FIX
+Copyright (c) 2008 Grant Hollingworth
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
