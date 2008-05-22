@@ -1,5 +1,7 @@
-# Provides a titlecase method for creating nice title and extends String.
-# It can be calling as Titlecase.titlecase or "foo".titlecase.
+# Adds String#titlecase for creating properly capitalized titles.
+# It can be called as Titlecase.titlecase or "a string".titlecase.
+#
+# If loaded in a Rails environment, it modifies Inflector.titlecase.
 module Titlecase
   SMALL_WORDS = %w{a an and as at but by en for if in of on or the to v v. via vs vs.}
 
