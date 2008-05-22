@@ -1,9 +1,19 @@
+# Provides a titlecase method for creating nice title and extends String.
+# It can be calling as Titlecase.titlecase or "foo".titlecase.
 module Titlecase
   SMALL_WORDS = %w{a an and as at but by en for if in of on or the to v v. via vs vs.}
 
   extend self
 
+  # Capitalizes most words to create a nicer looking title string.
+  #
+  # The list of "small words" which are not capped comes from
+  # the New York Times Manual of Style, plus 'vs' and 'v'. 
+  #
+  #   "notes on a scandal" # => "Notes on a Scandal"
+  #   "the good german"    # => "The Good German"
   def titlecase(title)
+
     phrases(title).map do |phrase|
       words = phrase.split
       words.map do |word|
@@ -28,6 +38,10 @@ module Titlecase
     end.join(" ")
   end
 
+  # Splits a title into an array based on punctuation.
+  #
+  #   "simple title"              # => ["simple title"]
+  #   "more complicated: titling" # => ["more complicated:", "titling"]
   def phrases(title)
     phrases = title.scan(/.+?(?:[:.;?!] |$)/).map {|phrase| phrase.strip }
 
@@ -45,6 +59,15 @@ module Titlecase
 end
 
 class String
+  # Capitalizes most words to create a nicer looking title string.
+  #
+  # The list of "small words" which are not capped comes from
+  # the New York Times Manual of Style, plus 'vs' and 'v'. 
+  #
+  # titlecase is also aliased as titleize.
+  #
+  #   "notes on a scandal" # => "Notes on a Scandal"
+  #   "the good german"    # => "The Good German"
   def titlecase
     Titlecase.titlecase(self)
   end
@@ -55,6 +78,19 @@ if defined? Inflector
   module Inflector
     extend self
 
+    # Capitalizes most words to create a nicer looking title string.
+    #
+    # The list of "small words" which are not capped comes from
+    # the New York Times Manual of Style, plus 'vs' and 'v'. 
+    #
+    # This replaces the default Rails titlecase. Like the default, it uses
+    # Inflector.underscore and Inflector.humanize to convert 
+    # underscored_names and CamelCaseNames to a more human form.
+    #
+    # titlecase is also aliased as titleize.
+    #
+    #   "notes on an active_record" # => "Notes on an Active Record"
+    #   "the GoodGerman"            # => "The Good German"
     def titlecase(title)
       Titlecase.titlecase(Inflector.humanize(Inflector.underscore(title)))
     end
