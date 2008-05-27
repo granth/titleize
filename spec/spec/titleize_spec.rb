@@ -7,6 +7,8 @@ require File.dirname(__FILE__) + "/../spec_helper.rb"
 SMALL_WORDS = %w{a an and as at but by en for if in of on or the to v v. via vs vs.}
 
 describe Titleize do
+  include Titleize
+
   describe "phrases" do
     it "should return an array" do
       phrases("a little sentence").should be_an_instance_of(Array)
@@ -152,6 +154,8 @@ describe Titleize do
 end
 
 describe Inflector do
+  include Inflector
+
   describe "titleize" do
     before(:each) do
       @title = "active_record and ActiveResource"
