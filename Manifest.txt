@@ -4,5 +4,5 @@ README.txt
 Rakefile
 lib/titleize.rb
 spec/spec.opts
-spec/spec/titleize_spec.rb
+spec/titleize_spec.rb
 spec/spec_helper.rb
