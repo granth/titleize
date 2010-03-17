@@ -1,6 +1,6 @@
 = Titleize
 
-* http://rubyforge.org/projects/titleize/
+* http://rubygems.org/gems/titleize
 
 == DESCRIPTION:
 
