@@ -124,6 +124,10 @@ describe Titleize do
       end
     end
 
+    it "should fix all-caps titles" do
+      titleize("IF IT’S ALL CAPS, FIX IT").should == "If It’s All Caps, Fix It"
+    end
+
     # http://daringfireball.net/projects/titlecase/examples-edge-cases
     it "should handle edge cases" do
       {

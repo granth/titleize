@@ -18,6 +18,9 @@ module Titleize
   #   "notes on a scandal" # => "Notes on a Scandal"
   #   "the good german"    # => "The Good German"
   def titleize(title)
+    title = title.dup
+    title.downcase! unless title[/[[:lower:]]/]  # assume all-caps need fixing
+
     phrases(title).map do |phrase|
       words = phrase.split
       words.map do |word|
