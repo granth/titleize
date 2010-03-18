@@ -128,11 +128,39 @@ describe Titleize do
       titleize("IF IT’S ALL CAPS, FIX IT").should == "If It’s All Caps, Fix It"
     end
 
-    # http://daringfireball.net/projects/titlecase/examples-edge-cases
+    # test suite from Perl titlecase
+    # http://github.com/ap/titlecase/blob/master/test.pl
     it "should handle edge cases" do
       {
-        %{Q&A With Steve Jobs: 'That's What Happens In Technology'} =>
-          %{Q&A With Steve Jobs: 'That's What Happens in Technology'},
+        %{For step-by-step directions email someone@gmail.com} =>
+        %{For Step-by-Step Directions Email someone@gmail.com},
+
+        %{2lmc Spool: 'Gruber on OmniFocus and Vapo(u)rware'} =>
+        %{2lmc Spool: 'Gruber on OmniFocus and Vapo(u)rware'},
+
+        %{Have you read “The Lottery”?} =>
+        %{Have You Read “The Lottery”?},
+
+        %{your hair[cut] looks (nice)} =>
+        %{Your Hair[cut] Looks (Nice)},
+
+        %{People probably won't put http://foo.com/bar/ in titles} =>
+        %{People Probably Won't Put http://foo.com/bar/ in Titles},
+
+        %{Scott Moritz and TheStreet.com’s million iPhone la‑la land} =>
+        %{Scott Moritz and TheStreet.com’s Million iPhone La‑La Land},
+
+        %{BlackBerry vs. iPhone} =>
+        %{BlackBerry vs. iPhone},
+
+        %{Notes and observations regarding Apple’s announcements from ‘The Beat Goes On’ special event} =>
+        %{Notes and Observations Regarding Apple’s Announcements From ‘The Beat Goes On’ Special Event},
+
+        %{Read markdown_rules.txt to find out how _underscores around words_ will be interpretted} =>
+        %{Read markdown_rules.txt to Find Out How _Underscores Around Words_ Will Be Interpretted},
+
+        %{Q&A with Steve Jobs: 'That's what happens in technology'} =>
+        %{Q&A With Steve Jobs: 'That's What Happens in Technology'},
 
         %{What Is AT&T's Problem?} => %{What Is AT&T's Problem?},
 
@@ -166,8 +194,20 @@ describe Titleize do
         %{"Nothing to Be Afraid Of?"} => %{"Nothing to Be Afraid Of?"},
         %{a thing} => %{A Thing},
 
-        %{'Gruber on OmniFocus and Vapo(u)rware'} =>
-        %{'Gruber on OmniFocus and Vapo(u)rware'},
+        %{Dr. Strangelove (or: how I Learned to Stop Worrying and Love the Bomb)} =>
+        %{Dr. Strangelove (Or: How I Learned to Stop Worrying and Love the Bomb)},
+
+        %{  this is trimming} =>
+        %{This Is Trimming},
+
+        %{this is trimming  } =>
+        %{This Is Trimming},
+
+        %{  this is trimming  } =>
+        %{This Is Trimming},
+
+        %{IF IT’S ALL CAPS, FIX IT} =>
+        %{If It’s All Caps, Fix It},
       }.each do |before, after|
         titleize(before).should == after
       end
