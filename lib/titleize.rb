@@ -35,6 +35,8 @@ module Titleize
           end.join
         when /^[[:alpha:]].*[[:upper:]]/ # non-first letter capitalized already
           word
+        when /^[[:digit:]]/  # first character is a number
+          word
         when words.first, words.last
           word.capitalize
         when *(SMALL_WORDS + SMALL_WORDS.map {|small| small.capitalize })

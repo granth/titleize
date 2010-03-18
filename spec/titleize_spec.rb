@@ -106,6 +106,10 @@ describe Titleize do
       titleize("iTunes").should == "iTunes"
     end
 
+    it "should not capitalize words that start with a number" do
+      titleize("2lmc").should == "2lmc"
+    end
+
     describe "with hyphens" do
       it "should handle hyphenated words" do
         titleize("iPhone la-la land").should == "iPhone La-La Land"
