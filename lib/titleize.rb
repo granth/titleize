@@ -29,6 +29,10 @@ module Titleize
         case word
         when /[[:alpha:]]\.[[:alpha:]]/  # words with dots in, like "example.com"
           word
+        when /[-‑]/  # hyphenated word (regular and non-breaking)
+          word.split(/([-‑])/).map do |part|
+            SMALL_WORDS.include?(part) ? part : part.capitalize
+          end.join
         when /^[[:alpha:]].*[[:upper:]]/ # non-first letter capitalized already
           word
         when words.first, words.last

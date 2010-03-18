@@ -106,6 +106,20 @@ describe Titleize do
       titleize("iTunes").should == "iTunes"
     end
 
+    describe "with hyphens" do
+      it "should handle hyphenated words" do
+        titleize("iPhone la-la land").should == "iPhone La-La Land"
+      end
+
+      it "should handle non-breaking hyphens" do
+        titleize("non‑breaking hyphen").should == "Non‑Breaking Hyphen"
+      end
+
+      it "should not capitalize small words within a hyphenated word" do
+        titleize("step-by-step directions").should == "Step-by-Step Directions"
+      end
+    end
+
     # http://daringfireball.net/projects/titlecase/examples-edge-cases
     it "should handle edge cases" do
       {
