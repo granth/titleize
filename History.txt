@@ -1,3 +1,10 @@
+=== 1.1.0 / 2010-03-18
+
+* fix all-caps titles
+* don't capitalize words that start with a number
+* handle hyphenated words
+* change project url to rubygems.org
+
 === 1.0.0 / 2008-05-22
 
 * Hoe-ized for RubyGemming
