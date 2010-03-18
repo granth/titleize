@@ -5,6 +5,8 @@ require 'hoe'
 require './lib/titleize.rb'
 require 'spec/rake/spectask'
 
+Hoe.plugin :git
+
 Hoe.spec "titleize" do
   developer "Grant Hollingworth", "grant@antiflux.org"
   remote_rdoc_dir = ""  # Release to root
