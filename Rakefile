@@ -5,9 +5,9 @@ require 'hoe'
 require './lib/titleize.rb'
 require 'spec/rake/spectask'
 
-Hoe.new('titleize', Titleize::VERSION) do |p|
-  p.developer("Grant Hollingworth", "grant@antiflux.org")
-  p.remote_rdoc_dir = '' # Release to root
+Hoe.spec "titleize" do
+  developer "Grant Hollingworth", "grant@antiflux.org"
+  remote_rdoc_dir = ""  # Release to root
 end
 
 desc "Run all specs"
