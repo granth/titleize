@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Adds String#titleize for creating properly capitalized titles.
 # It can be called as Titleize.titleize or "a string".titleize.
 #
