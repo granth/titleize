@@ -1,8 +1,10 @@
+# -*- coding: utf-8 -*-
+
 module Inflector
   #stub
 end
 
-require File.dirname(__FILE__) + "/spec_helper.rb"
+require 'spec_helper'
 
 SMALL_WORDS = %w{a an and as at but by en for if in of on or the to v v. via vs vs.}
 
@@ -215,7 +217,7 @@ describe Titleize do
   end
 
   it "should have titleize as a singleton method" do
-    Titleize.singleton_methods.should include("titleize")
+    Titleize.singleton_methods.map(&:to_sym).should include(:titleize)
   end
 end
 
@@ -243,7 +245,7 @@ describe Inflector do
     end
 
     it "should be aliased as titlecase" do
-      Inflector.singleton_methods.should include("titlecase")
+      Inflector.singleton_methods.map(&:to_sym).should include(:titlecase)
       Inflector.stub!(:titlecase).and_return("title")
       Inflector.stub!(:titleize).and_return("title")
       Inflector.titlecase("this").should == Inflector.titleize("this")
@@ -253,7 +255,7 @@ end
 
 describe String do
   it "should have a titleize method" do
-    String.instance_methods.should include("titleize")
+    String.instance_methods.map(&:to_sym).should include(:titleize)
   end
 
   it "should work" do
@@ -261,7 +263,7 @@ describe String do
   end
 
   it "should be aliased as #titlecase" do
-    String.instance_methods.should include("titlecase")
+    String.instance_methods.map(&:to_sym).should include(:titlecase)
     title = "this is a pile of testing text"
     title.titlecase.should == title.titleize
   end
