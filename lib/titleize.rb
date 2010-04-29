@@ -88,8 +88,8 @@ class String
   alias_method :titlecase, :titleize
 end
 
-if defined? Inflector
-  module Inflector
+if defined? ActiveSupport
+  module ActiveSupport::Inflector
     extend self
 
     # Capitalizes most words to create a nicer looking title string.
@@ -106,7 +106,7 @@ if defined? Inflector
     #   "notes on an active_record" # => "Notes on an Active Record"
     #   "the GoodGerman"            # => "The Good German"
     def titleize(title)
-      Titleize.titleize(Inflector.humanize(Inflector.underscore(title)))
+      Titleize.titleize(ActiveSupport::Inflector.humanize(ActiveSupport::Inflector.underscore(title)))
     end
     alias_method :titlecase, :titleize
   end

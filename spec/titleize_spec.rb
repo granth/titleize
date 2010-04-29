@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
-module Inflector
-  #stub
+module ActiveSupport
+  module Inflector
+    #stub
+  end
 end
 
 require 'spec_helper'
@@ -221,8 +223,8 @@ describe Titleize do
   end
 end
 
-describe Inflector do
-  include Inflector
+describe ActiveSupport::Inflector do
+  include ActiveSupport::Inflector
 
   describe "titleize" do
     before(:each) do
@@ -232,23 +234,23 @@ describe Inflector do
     it "should call humanize and underscore like the default in Rails" do
       underscored_title = "active_record and active_resource"
       humanized_title = "Active record and active resource"
-      Inflector.should_receive(:underscore).with(@title).and_return(underscored_title)
-      Inflector.should_receive(:humanize).with(underscored_title).and_return(humanized_title)
+      ActiveSupport::Inflector.should_receive(:underscore).with(@title).and_return(underscored_title)
+      ActiveSupport::Inflector.should_receive(:humanize).with(underscored_title).and_return(humanized_title)
       titleize(@title).should == "Active Record and Active Resource"
     end
 
     it "should replace Inflector.titleize" do
       Titleize.should_receive(:titleize).with(@title)
-      Inflector.stub!(:underscore).and_return(@title)
-      Inflector.stub!(:humanize).and_return(@title)
-      Inflector.titleize(@title)
+      ActiveSupport::Inflector.stub!(:underscore).and_return(@title)
+      ActiveSupport::Inflector.stub!(:humanize).and_return(@title)
+      ActiveSupport::Inflector.titleize(@title)
     end
 
     it "should be aliased as titlecase" do
-      Inflector.singleton_methods.map(&:to_sym).should include(:titlecase)
-      Inflector.stub!(:titlecase).and_return("title")
-      Inflector.stub!(:titleize).and_return("title")
-      Inflector.titlecase("this").should == Inflector.titleize("this")
+      ActiveSupport::Inflector.singleton_methods.map(&:to_sym).should include(:titlecase)
+      ActiveSupport::Inflector.stub!(:titlecase).and_return("title")
+      ActiveSupport::Inflector.stub!(:titleize).and_return("title")
+      ActiveSupport::Inflector.titlecase("this").should == ActiveSupport::Inflector.titleize("this")
     end
   end
 end
