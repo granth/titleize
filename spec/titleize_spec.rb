@@ -3,6 +3,8 @@
 module ActiveSupport
   module Inflector
     #stub
+    def underscore(string) string; end
+    def humanize(string)   string; end
   end
 end
 
@@ -268,5 +270,27 @@ describe String do
     String.instance_methods.map(&:to_sym).should include(:titlecase)
     title = "this is a pile of testing text"
     title.titlecase.should == title.titleize
+  end
+
+  context "when ActiveSupport is loaded" do
+    it "should act the same as Inflector#titleize" do
+      ActiveSupport::Inflector.should_receive(:titleize).with("title")
+      "title".titleize
+    end
+  end
+
+  context "when ActiveSupport is not loaded" do
+    before(:all) do
+      Object.send :remove_const, :ActiveSupport
+    end
+
+    it "should work" do
+      lambda { "foo".titleize }.should_not raise_exception
+    end
+
+    it "should call Titleize#titleize" do
+      Titleize.should_receive(:titleize).with("title")
+      "title".titleize
+    end
   end
 end
