@@ -1,3 +1,9 @@
+=== 1.2.0 / 2010-07-22
+
+* Ruby 1.9 compatibility. [Jason Weathered]
+* Active Support's Inflector is under the ActiveSupport namespace. [Jason Weathered]
+* have String#titleize act like Inflector#titleize when ActiveSupport is loaded
+
 === 1.1.0 / 2010-03-18
 
 * fix all-caps titles
