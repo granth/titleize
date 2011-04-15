@@ -6,7 +6,6 @@
 #
 # If loaded in a Rails environment, it modifies Inflector.titleize.
 module Titleize
-  VERSION = '1.2.0'
   SMALL_WORDS = %w{a an and as at but by en for if in of on or the to v v. via vs vs.}
 
   extend self
