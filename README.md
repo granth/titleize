@@ -21,12 +21,12 @@ http://daringfireball.net/2008/05/title_case
 SYNOPSIS:
 ---------------------
 
-  "a lovely and talented title".titleize # => "A Lovely and Talented Title"
+    "a lovely and talented title".titleize # => "A Lovely and Talented Title"
 
 INSTALL:
 ---------------------
 
-gem install titleize
+    gem install titleize
 
 LICENSE:
 ---------------------
