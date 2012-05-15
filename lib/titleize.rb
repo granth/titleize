@@ -89,6 +89,11 @@ class String
     end
   end
   alias_method :titlecase, :titleize
+
+  def titleize!
+    replace(titleize)
+  end
+  alias_method :titlecase!, :titleize!
 end
 
 if defined? ActiveSupport
