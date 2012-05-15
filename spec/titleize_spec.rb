@@ -261,6 +261,10 @@ describe String do
   it "should have a titleize method" do
     String.instance_methods.map(&:to_sym).should include(:titleize)
   end
+  
+  it "should have a titleize! method" do
+    String.instance_methods.map(&:to_sym).should include(:titleize!)
+  end
 
   it "should work" do
     "this is a test".titleize.should == "This Is a Test"
@@ -270,6 +274,20 @@ describe String do
     String.instance_methods.map(&:to_sym).should include(:titlecase)
     title = "this is a pile of testing text"
     title.titlecase.should == title.titleize
+  end
+  
+  context 'when using the self modified version of titleize' do
+    it 'should work' do
+      test_str = 'this is a test'
+      test_str.titleize!
+      test_str.should == 'This Is a Test'
+    end
+    
+    it 'should be aliased as #titlecase!' do
+      test_str = 'this is a test'
+      test_str.titlecase!
+      test_str.should == 'This Is a Test'
+    end
   end
 
   context "when ActiveSupport is loaded" do
