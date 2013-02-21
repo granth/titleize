@@ -1,8 +1,8 @@
 # Titleize
 
-* http://rubygems.org/gems/titleize
+http://rubygems.org/gems/titleize
 
-## DESCRIPTION:
+### Description
 
 Adds `String#titleize` for creating properly capitalized titles.
 It can be called as `Titleize.titleize` or `"a string".titleize`. It is also
@@ -18,15 +18,15 @@ this behavior, use the options `:underscore => false` and `:humanize => false`.
 
 Based on [TitleCase.pl](http://daringfireball.net/2008/05/title_case) by John Gruber.
 
-## SYNOPSIS
+### Synopsis
 
-`a lovely and talented title".titleize # => "A Lovely and Talented Title"`
+`"a lovely and talented title".titleize # => "A Lovely and Talented Title"`
 
-## INSTALL
+### Install
 
 `gem install titleize`
 
-## LICENSE
+### License
 
 (The MIT License)
 
