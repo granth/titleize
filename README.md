@@ -11,7 +11,10 @@ aliased as titlecase.
 The list of "small words" which are not capped comes from the New York Times 
 Manual of Style, plus 'vs' and 'v'.
 
-If loaded in a Rails environment, it modifies Inflector.titleize.
+If loaded in a Rails environment, it modifies Inflector#titleize. By default 
+ActiveSupport calls Inflector#underscore and Inflector#humanize. This however
+can be problematic with words like "iPod", "GPS", and "McArthur". To disable 
+this behavior, use the options :underscore => false and :humanize => false.
 
 Based on TitleCase.pl by John Gruber.
 http://daringfireball.net/2008/05/title_case

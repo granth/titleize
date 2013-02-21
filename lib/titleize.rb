@@ -81,9 +81,9 @@ class String
   #
   #   "notes on a scandal" # => "Notes on a Scandal"
   #   "the good german"    # => "The Good German"
-  def titleize
+  def titleize(opts={})
     if defined? ActiveSupport
-      ActiveSupport::Inflector.titleize(self)
+      ActiveSupport::Inflector.titleize(self, opts)
     else
       Titleize.titleize(self)
     end
@@ -102,14 +102,20 @@ if defined? ActiveSupport
     #
     # This replaces the default Rails titleize. Like the default, it uses
     # Inflector.underscore and Inflector.humanize to convert
-    # underscored_names and CamelCaseNames to a more human form.
+    # underscored_names and CamelCaseNames to a more human form. However, you can change
+	# this behavior by passing :humanize => false or :underscore => false as options. 
+	# This can be useful when dealing with words like "iPod" and "GPS".
     #
     # titleize is also aliased as titlecase.
     #
     #   "notes on an active_record" # => "Notes on an Active Record"
     #   "the GoodGerman"            # => "The Good German"
-    def titleize(title)
-      Titleize.titleize(ActiveSupport::Inflector.humanize(ActiveSupport::Inflector.underscore(title)))
+    def titleize(title, opts={})
+      opts = {:humanize => true, :underscore => true}.merge(opts)
+      title = ActiveSupport::Inflector.underscore(title) if opts[:underscore]
+      title = ActiveSupport::Inflector.humanize(title) if opts[:humanize]
+
+      Titleize.titleize(title)
     end
     alias_method :titlecase, :titleize
   end
