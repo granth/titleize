@@ -241,6 +241,20 @@ describe ActiveSupport::Inflector do
       titleize(@title).should == "Active Record and Active Resource"
     end
 
+    it "should allow disabling of Inflector#underscore" do
+      humanized_title = "Active record and activeresource"
+      ActiveSupport::Inflector.should_not_receive(:underscore)
+      ActiveSupport::Inflector.should_receive(:humanize).with(@title).and_return(humanized_title)
+      titleize(@title, :underscore => false).should == "Active Record and Activeresource"
+    end
+
+    it "should allow disabling of Inflector#humanize" do
+      underscored_title = "active_record and active_resource"
+      ActiveSupport::Inflector.should_not_receive(:humanize)
+      ActiveSupport::Inflector.should_receive(:underscore).with(@title).and_return(underscored_title)
+      titleize(@title, :humanize => false).should == "Active_record and Active_resource"
+    end
+
     it "should replace Inflector.titleize" do
       Titleize.should_receive(:titleize).with(@title)
       ActiveSupport::Inflector.stub!(:underscore).and_return(@title)
@@ -274,8 +288,18 @@ describe String do
 
   context "when ActiveSupport is loaded" do
     it "should act the same as Inflector#titleize" do
-      ActiveSupport::Inflector.should_receive(:titleize).with("title")
+      ActiveSupport::Inflector.should_receive(:titleize).with("title", {})
       "title".titleize
+    end
+
+    it "should allow disabling of Inflector#underscore" do
+      ActiveSupport::Inflector.should_not_receive(:underscore)
+      "title".titleize(:underscore => false)
+    end
+
+    it "should allow disabling of Inflector#humanize" do
+      ActiveSupport::Inflector.should_not_receive(:humanize)
+      "title".titleize(:humanize => false)
     end
   end
 
