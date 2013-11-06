@@ -184,13 +184,13 @@ describe Titleize do
         %{this vs. that} => %{This vs. That},
 
         %{The SEC's Apple Probe: What You Need to Know} =>
-          %{The SEC's Apple Probe: What You Need to Know},
+        %{The SEC's Apple Probe: What You Need to Know},
 
         %{'by the Way, small word at the start but within quotes.'} =>
-          %{'By the Way, Small Word at the Start but Within Quotes.'},
+        %{'By the Way, Small Word at the Start but Within Quotes.'},
 
         %{Small word at end is nothing to be afraid of} =>
-          %{Small Word at End Is Nothing to Be Afraid Of},
+        %{Small Word at End Is Nothing to Be Afraid Of},
 
         %{Starting Sub-Phrase With a Small Word: a Trick, Perhaps?} =>
         %{Starting Sub-Phrase With a Small Word: A Trick, Perhaps?},
