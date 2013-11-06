@@ -95,6 +95,11 @@ describe Titleize do
       end
     end
 
+    it "should capitalize single word abbreviation with punctuation" do
+      titleize("m.d.").should == "M.D."
+      titleize("p.h.d.").should == "P.H.D."
+    end
+
     it "should not screw up acronyms" do
       titleize("the SEC's decision").should == "The SEC's Decision"
     end
@@ -214,6 +219,15 @@ describe Titleize do
 
         %{IF IT’S ALL CAPS, FIX IT} =>
         %{If It’s All Caps, Fix It},
+
+        %{JOHN SMITH M.D.} =>
+        %{John Smith M.D.},
+
+        %{John Smith MD} =>
+        %{John Smith MD},
+
+        %{JOHN SMITH P.H.D.} =>
+        %{John Smith P.H.D.}
       }.each do |before, after|
         titleize(before).should == after
       end

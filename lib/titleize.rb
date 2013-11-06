@@ -30,6 +30,8 @@ module Titleize
         end
 
         case word
+        when /[[:alpha:]]\.([[:alpha:]]\.)+/
+          word.split(/\./).map(&:upcase).concat([""]).join(".")
         when /[[:alpha:]]\.[[:alpha:]]/  # words with dots in, like "example.com"
           word
         when /[-‑]/  # hyphenated word (regular and non-breaking)
