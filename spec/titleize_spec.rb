@@ -271,15 +271,15 @@ describe ActiveSupport::Inflector do
 
     it "should replace Inflector.titleize" do
       Titleize.should_receive(:titleize).with(@title)
-      ActiveSupport::Inflector.stub!(:underscore).and_return(@title)
-      ActiveSupport::Inflector.stub!(:humanize).and_return(@title)
+      ActiveSupport::Inflector.stub(:underscore).and_return(@title)
+      ActiveSupport::Inflector.stub(:humanize).and_return(@title)
       ActiveSupport::Inflector.titleize(@title)
     end
 
     it "should be aliased as titlecase" do
       ActiveSupport::Inflector.singleton_methods.map(&:to_sym).should include(:titlecase)
-      ActiveSupport::Inflector.stub!(:titlecase).and_return("title")
-      ActiveSupport::Inflector.stub!(:titleize).and_return("title")
+      ActiveSupport::Inflector.stub(:titlecase).and_return("title")
+      ActiveSupport::Inflector.stub(:titleize).and_return("title")
       ActiveSupport::Inflector.titlecase("this").should == ActiveSupport::Inflector.titleize("this")
     end
   end
