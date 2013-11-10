@@ -17,11 +17,13 @@ module Titleize
   #
   #   "notes on a scandal" # => "Notes on a Scandal"
   #   "the good german"    # => "The Good German"
-  def titleize(title)
+  def titleize(title, add_small_words = [])
+    all_small_words = SMALL_WORDS.dup.concat(add_small_words)
+
     title = title.dup
     title.downcase! unless title[/[[:lower:]]/]  # assume all-caps need fixing
 
-    phrases(title).map do |phrase|
+    phrases(title, add_small_words).map do |phrase|
       words = phrase.split
       words.map do |word|
         def word.capitalize
@@ -30,11 +32,13 @@ module Titleize
         end
 
         case word
+        when /[[:alpha:]]\.([[:alpha:]]\.)+/ # words with dots ending with dots, like "ph.d."
+          word.split(/\./).map(&:capitalize).concat([""]).join(".")
         when /[[:alpha:]]\.[[:alpha:]]/  # words with dots in, like "example.com"
           word
         when /[-‑]/  # hyphenated word (regular and non-breaking)
           word.split(/([-‑])/).map do |part|
-            SMALL_WORDS.include?(part) ? part : part.capitalize
+            all_small_words.include?(part) ? part : part.capitalize
           end.join
         when /^[[:alpha:]].*[[:upper:]]/ # non-first letter capitalized already
           word
@@ -42,32 +46,39 @@ module Titleize
           word
         when words.first, words.last
           word.capitalize
-        when *(SMALL_WORDS + SMALL_WORDS.map {|small| small.capitalize })
+        when *(all_small_words + all_small_words.map {|small| small.capitalize })
           word.downcase
         else
           word.capitalize
         end
       end.join(" ")
-    end.join(" ")
+    end.join(" ") 
   end
 
   # Splits a title into an array based on punctuation.
   #
   #   "simple title"              # => ["simple title"]
   #   "more complicated: titling" # => ["more complicated:", "titling"]
-  def phrases(title)
+  def phrases(title, add_small_words = [])
+    all_small_words = SMALL_WORDS.dup.concat(add_small_words)
+    adjusted = false
+
     phrases = title.scan(/.+?(?:[:.;?!] |$)/).map {|phrase| phrase.strip }
 
     # rejoin phrases that were split on the '.' from a small word
-    if phrases.size > 1
-      phrases[0..-2].each_with_index do |phrase, index|
-        if SMALL_WORDS.include?(phrase.split.last.downcase)
-          phrases[index] << " " + phrases.slice!(index + 1)
+    if phrases.size > 1 
+      loop do
+        adjusted = false
+        phrases[0..-2].each_with_index do |phrase, index|
+          if (all_small_words.include?(phrase.split.last.downcase) || phrase.split.last.downcase.match(/(.+\.)+.+\./)) && phrases.size > index + 1
+            phrases[index] << " " + phrases.slice!(index + 1).to_s
+            adjusted = true
+          end
         end
+        break if !adjusted
       end
     end
-
-    phrases
+    phrases.map(&:strip)
   end
 end
 
@@ -81,11 +92,11 @@ class String
   #
   #   "notes on a scandal" # => "Notes on a Scandal"
   #   "the good german"    # => "The Good German"
-  def titleize(opts={})
+  def titleize(add_small_words = [], opts={})
     if defined? ActiveSupport
-      ActiveSupport::Inflector.titleize(self, opts)
+      ActiveSupport::Inflector.titleize(self, opts, add_small_words)
     else
-      Titleize.titleize(self)
+      Titleize.titleize(self, add_small_words)
     end
   end
   alias_method :titlecase, :titleize
@@ -115,12 +126,12 @@ if defined? ActiveSupport
     #
     #   "notes on an active_record" # => "Notes on an Active Record"
     #   "the GoodGerman"            # => "The Good German"
-    def titleize(title, opts={})
+    def titleize(title, opts={}, add_small_words = [])
       opts = {:humanize => true, :underscore => true}.merge(opts)
       title = ActiveSupport::Inflector.underscore(title) if opts[:underscore]
       title = ActiveSupport::Inflector.humanize(title) if opts[:humanize]
 
-      Titleize.titleize(title)
+      Titleize.titleize(title, add_small_words)
     end
     alias_method :titlecase, :titleize
   end

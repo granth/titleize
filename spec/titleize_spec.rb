@@ -40,6 +40,10 @@ describe Titleize do
       phrases("headache! yes").should == ["headache!", "yes"]
     end
 
+    it "should not split on periods if part of abbreviation" do
+      phrases("s.a. de c.v.").should == ["s.a. de c.v."]
+    end
+
     it "should rejoin into the original string" do
       title = "happy: not sad; pushing! laughing? ok."
       phrases(title).join(" ").should == title
@@ -47,6 +51,7 @@ describe Titleize do
 
     it "should not get confused by small words with punctuation" do
       phrases("this vs. that").should == ["this vs. that"]
+      phrases("u.s.a. vs. mexico").should == ["u.s.a. vs. mexico"]
       phrases("this vs. that. no").should == ["this vs. that.", "no"]
       phrases("this: that vs. him. no. why?").should ==
         ["this:", "that vs. him.", "no.", "why?"]
@@ -95,6 +100,11 @@ describe Titleize do
       end
     end
 
+    it "should capitalize single word abbreviation with punctuation" do
+      titleize("m.d.").should == "M.D."
+      titleize("p.h.d.").should == "P.H.D."
+    end
+
     it "should not screw up acronyms" do
       titleize("the SEC's decision").should == "The SEC's Decision"
     end
@@ -114,6 +124,14 @@ describe Titleize do
 
     it "should not capitalize words that start with a number" do
       titleize("2lmc").should == "2lmc"
+    end
+
+    describe "with additional small words" do
+      it "should follow the rules with the new small words" do
+        titleize("s.a. de c.v.", %w{de}).should == "S.A. de C.V."
+        titleize("DESTILERIA LA CONQUISTA, S.A. DE C.V. Y CAVAS VAMER, S.A. DE C.V.", %w{de la})
+          .should == "Destileria la Conquista, S.A. de C.V. Y Cavas Vamer, S.A. de C.V."
+      end
     end
 
     describe "with hyphens" do
@@ -179,13 +197,13 @@ describe Titleize do
         %{this vs. that} => %{This vs. That},
 
         %{The SEC's Apple Probe: What You Need to Know} =>
-          %{The SEC's Apple Probe: What You Need to Know},
+        %{The SEC's Apple Probe: What You Need to Know},
 
         %{'by the Way, small word at the start but within quotes.'} =>
-          %{'By the Way, Small Word at the Start but Within Quotes.'},
+        %{'By the Way, Small Word at the Start but Within Quotes.'},
 
         %{Small word at end is nothing to be afraid of} =>
-          %{Small Word at End Is Nothing to Be Afraid Of},
+        %{Small Word at End Is Nothing to Be Afraid Of},
 
         %{Starting Sub-Phrase With a Small Word: a Trick, Perhaps?} =>
         %{Starting Sub-Phrase With a Small Word: A Trick, Perhaps?},
@@ -214,6 +232,24 @@ describe Titleize do
 
         %{IF IT’S ALL CAPS, FIX IT} =>
         %{If It’s All Caps, Fix It},
+
+        %{JOHN SMITH M.D.} =>
+        %{John Smith M.D.},
+
+        %{John Smith MD} =>
+        %{John Smith MD},
+
+        %{JOHN SMITH PH.D.} =>
+        %{John Smith Ph.D.},
+
+        %{john smith ph.d.} =>
+        %{John Smith Ph.D.},
+
+        %{u.s.a. vs. mexico} =>
+        %{U.S.A. vs. Mexico}, 
+
+        %{DESTILERIA LA CONQUISTA, S.A. DE C.V. Y CAVAS VAMER, S.A. DE C.V.} =>
+        %{Destileria La Conquista, S.A. De C.V. Y Cavas Vamer, S.A. De C.V.}
       }.each do |before, after|
         titleize(before).should == after
       end
@@ -256,16 +292,16 @@ describe ActiveSupport::Inflector do
     end
 
     it "should replace Inflector.titleize" do
-      Titleize.should_receive(:titleize).with(@title)
-      ActiveSupport::Inflector.stub!(:underscore).and_return(@title)
-      ActiveSupport::Inflector.stub!(:humanize).and_return(@title)
+      Titleize.should_receive(:titleize).with(@title, [])
+      ActiveSupport::Inflector.stub(:underscore).and_return(@title)
+      ActiveSupport::Inflector.stub(:humanize).and_return(@title)
       ActiveSupport::Inflector.titleize(@title)
     end
 
     it "should be aliased as titlecase" do
       ActiveSupport::Inflector.singleton_methods.map(&:to_sym).should include(:titlecase)
-      ActiveSupport::Inflector.stub!(:titlecase).and_return("title")
-      ActiveSupport::Inflector.stub!(:titleize).and_return("title")
+      ActiveSupport::Inflector.stub(:titlecase).and_return("title")
+      ActiveSupport::Inflector.stub(:titleize).and_return("title")
       ActiveSupport::Inflector.titlecase("this").should == ActiveSupport::Inflector.titleize("this")
     end
   end
@@ -282,6 +318,7 @@ describe String do
 
   it "should work" do
     "this is a test".titleize.should == "This Is a Test"
+    "S.A. DE C.V.".titleize(["de"]).should == "S.A. de C.V."
   end
 
   it "should be aliased as #titlecase" do
@@ -306,18 +343,18 @@ describe String do
 
   context "when ActiveSupport is loaded" do
     it "should act the same as Inflector#titleize" do
-      ActiveSupport::Inflector.should_receive(:titleize).with("title", {})
+      ActiveSupport::Inflector.should_receive(:titleize).with("title", {}, [])
       "title".titleize
     end
 
     it "should allow disabling of Inflector#underscore" do
       ActiveSupport::Inflector.should_not_receive(:underscore)
-      "title".titleize(:underscore => false)
+      "title".titleize([], {:underscore => false})
     end
 
     it "should allow disabling of Inflector#humanize" do
       ActiveSupport::Inflector.should_not_receive(:humanize)
-      "title".titleize(:humanize => false)
+      "title".titleize([], {:humanize => false})
     end
   end
 
