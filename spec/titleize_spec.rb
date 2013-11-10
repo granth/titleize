@@ -40,6 +40,10 @@ describe Titleize do
       phrases("headache! yes").should == ["headache!", "yes"]
     end
 
+    it "should not split on periods if part of abbreviation" do
+      phrases("s.a. de c.v.").should == ["s.a. de c.v."]
+    end
+
     it "should rejoin into the original string" do
       title = "happy: not sad; pushing! laughing? ok."
       phrases(title).join(" ").should == title
@@ -47,6 +51,7 @@ describe Titleize do
 
     it "should not get confused by small words with punctuation" do
       phrases("this vs. that").should == ["this vs. that"]
+      phrases("u.s.a. vs. mexico").should == ["u.s.a. vs. mexico"]
       phrases("this vs. that. no").should == ["this vs. that.", "no"]
       phrases("this: that vs. him. no. why?").should ==
         ["this:", "that vs. him.", "no.", "why?"]
@@ -119,6 +124,14 @@ describe Titleize do
 
     it "should not capitalize words that start with a number" do
       titleize("2lmc").should == "2lmc"
+    end
+
+    describe "with additional small words" do
+      it "should follow the rules with the new small words" do
+        titleize("s.a. de c.v.", %w{de}).should == "S.A. de C.V."
+        titleize("DESTILERIA LA CONQUISTA, S.A. DE C.V. Y CAVAS VAMER, S.A. DE C.V.", %w{de la})
+          .should == "Destileria la Conquista, S.A. de C.V. Y Cavas Vamer, S.A. de C.V."
+      end
     end
 
     describe "with hyphens" do
@@ -226,8 +239,17 @@ describe Titleize do
         %{John Smith MD} =>
         %{John Smith MD},
 
-        %{JOHN SMITH P.H.D.} =>
-        %{John Smith P.H.D.}
+        %{JOHN SMITH PH.D.} =>
+        %{John Smith Ph.D.},
+
+        %{john smith ph.d.} =>
+        %{John Smith Ph.D.},
+
+        %{u.s.a. vs. mexico} =>
+        %{U.S.A. vs. Mexico}, 
+
+        %{DESTILERIA LA CONQUISTA, S.A. DE C.V. Y CAVAS VAMER, S.A. DE C.V.} =>
+        %{Destileria La Conquista, S.A. De C.V. Y Cavas Vamer, S.A. De C.V.}
       }.each do |before, after|
         titleize(before).should == after
       end
