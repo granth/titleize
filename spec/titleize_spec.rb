@@ -292,7 +292,7 @@ describe ActiveSupport::Inflector do
     end
 
     it "should replace Inflector.titleize" do
-      Titleize.should_receive(:titleize).with(@title)
+      Titleize.should_receive(:titleize).with(@title, [])
       ActiveSupport::Inflector.stub(:underscore).and_return(@title)
       ActiveSupport::Inflector.stub(:humanize).and_return(@title)
       ActiveSupport::Inflector.titleize(@title)
@@ -318,6 +318,7 @@ describe String do
 
   it "should work" do
     "this is a test".titleize.should == "This Is a Test"
+    "S.A. DE C.V.".titleize(["de"]).should == "S.A. de C.V."
   end
 
   it "should be aliased as #titlecase" do
@@ -342,18 +343,18 @@ describe String do
 
   context "when ActiveSupport is loaded" do
     it "should act the same as Inflector#titleize" do
-      ActiveSupport::Inflector.should_receive(:titleize).with("title", {})
+      ActiveSupport::Inflector.should_receive(:titleize).with("title", {}, [])
       "title".titleize
     end
 
     it "should allow disabling of Inflector#underscore" do
       ActiveSupport::Inflector.should_not_receive(:underscore)
-      "title".titleize(:underscore => false)
+      "title".titleize([], {:underscore => false})
     end
 
     it "should allow disabling of Inflector#humanize" do
       ActiveSupport::Inflector.should_not_receive(:humanize)
-      "title".titleize(:humanize => false)
+      "title".titleize([], {:humanize => false})
     end
   end
 

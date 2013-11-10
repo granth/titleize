@@ -92,11 +92,11 @@ class String
   #
   #   "notes on a scandal" # => "Notes on a Scandal"
   #   "the good german"    # => "The Good German"
-  def titleize(opts={})
+  def titleize(add_small_words = [], opts={})
     if defined? ActiveSupport
-      ActiveSupport::Inflector.titleize(self, opts)
+      ActiveSupport::Inflector.titleize(self, opts, add_small_words)
     else
-      Titleize.titleize(self)
+      Titleize.titleize(self, add_small_words)
     end
   end
   alias_method :titlecase, :titleize
@@ -126,12 +126,12 @@ if defined? ActiveSupport
     #
     #   "notes on an active_record" # => "Notes on an Active Record"
     #   "the GoodGerman"            # => "The Good German"
-    def titleize(title, opts={})
+    def titleize(title, opts={}, add_small_words = [])
       opts = {:humanize => true, :underscore => true}.merge(opts)
       title = ActiveSupport::Inflector.underscore(title) if opts[:underscore]
       title = ActiveSupport::Inflector.humanize(title) if opts[:humanize]
 
-      Titleize.titleize(title)
+      Titleize.titleize(title, add_small_words)
     end
     alias_method :titlecase, :titleize
   end
