@@ -23,7 +23,7 @@ module Titleize
 
     phrases(title).map do |phrase|
       words = phrase.split
-      words.map do |word|
+      words.map.with_index do |word, index|
         def word.capitalize
           # like String#capitalize, but it starts with the first letter
           self.sub(/[[:alpha:]].*/) {|subword| subword.capitalize}
@@ -40,10 +40,12 @@ module Titleize
           word
         when /^[[:digit:]]/  # first character is a number
           word
-        when words.first, words.last
-          word.capitalize
         when *(SMALL_WORDS + SMALL_WORDS.map {|small| small.capitalize })
-          word.downcase
+          if index == 0 || index == words.size - 1
+            word.capitalize
+          else
+            word.downcase
+          end
         else
           word.capitalize
         end

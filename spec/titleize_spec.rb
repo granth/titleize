@@ -90,6 +90,12 @@ describe Titleize do
       end
     end
 
+    it "does not capitalize later uses of the first small word" do
+      SMALL_WORDS.each do |word|
+        titleize("#{word} and #{word} are different").should == "#{word.capitalize} and #{word} Are Different"
+      end
+    end
+
     it "should capitalize a small word if it is the last word" do
       SMALL_WORDS.each do |word|
         titleize("small #{word}").should == "Small #{word.capitalize}"
