@@ -56,18 +56,22 @@ module Titleize
   #   "simple title"              # => ["simple title"]
   #   "more complicated: titling" # => ["more complicated:", "titling"]
   def phrases(title)
-    phrases = title.scan(/.+?(?:[:.;?!] |$)/).map {|phrase| phrase.strip }
-
-    # rejoin phrases that were split on the '.' from a small word
-    if phrases.size > 1
-      phrases[0..-2].each_with_index do |phrase, index|
-        if SMALL_WORDS.include?(phrase.split.last.downcase)
-          phrases[index] << " " + phrases.slice!(index + 1)
-        end
-      end
+    phrases = [[]]
+    title.split.each do |word|
+      phrases.last << word
+      phrases << [] if ends_with_punctuation?(word) && !small_word?(word)
     end
+    phrases.reject(&:empty?).map { |phrase| phrase.join " " }
+  end
 
-    phrases
+  private
+
+  def small_word?(word)
+    SMALL_WORDS.include? word.downcase
+  end
+
+  def ends_with_punctuation?(word)
+    word =~ /[:.;?!]$/
   end
 end
 

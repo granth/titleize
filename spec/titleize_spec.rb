@@ -50,6 +50,7 @@ describe Titleize do
       phrases("this vs. that. no").should == ["this vs. that.", "no"]
       phrases("this: that vs. him. no. why?").should ==
         ["this:", "that vs. him.", "no.", "why?"]
+      phrases("this vs. that vs. what").should == ["this vs. that vs. what"]
     end
 
     it "should handle punctuation combined with a small word as the last word" do
