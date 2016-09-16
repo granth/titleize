@@ -1,3 +1,8 @@
+=== 1.4.1 / 2016-09-16
+
+* fix capitalization of repeated small words
+* handle multiple punctuated small words ("v.", "vs.")
+
 === 1.4.0 / 2016-02-04
 
 * check for the presence of ActiveSupport::Inflector instead of just ActiveSupport [Connor Prussin]
