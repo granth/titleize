@@ -17,9 +17,24 @@ module Titleize
   #
   #   "notes on a scandal" # => "Notes on a Scandal"
   #   "the good german"    # => "The Good German"
-  def titleize(title)
+  #
+  # Pass additional small words in opts[:small_words]
+  #
+  #   titleize("coffee w cream", small_words: ['w']) # => "Coffee w Cream"
+  #
+  # For strings in ALL CAPS, specify acronyms to be preserved in opts[:acronyms]
+  #
+  #   titleize("SMITH TO HEAD SEC", acronyms: ['SEC']) # => "Smith to Head SEC"
+  #
+  def titleize(title, opts={})
     title = title.dup
     title.downcase! unless title[/[[:lower:]]/]  # assume all-caps need fixing
+
+    small_words = SMALL_WORDS + (opts[:small_words] || [])
+    small_words = small_words + small_words.map { |small| small.capitalize }
+
+    acronyms = opts[:acronyms] || []
+    acronyms = acronyms + acronyms.map { |acronym| acronym.downcase }
 
     phrases(title).map do |phrase|
       words = phrase.split
@@ -40,12 +55,14 @@ module Titleize
           word
         when /^[[:digit:]]/  # first character is a number
           word
-        when *(SMALL_WORDS + SMALL_WORDS.map {|small| small.capitalize })
+        when *small_words
           if index == 0 || index == words.size - 1
             word.capitalize
           else
             word.downcase
           end
+        when *acronyms
+          word.upcase
         else
           word.capitalize
         end
@@ -87,17 +104,26 @@ class String
   #
   #   "notes on a scandal" # => "Notes on a Scandal"
   #   "the good german"    # => "The Good German"
+  #
+  # Pass additional small words in opts[:small_words]
+  #
+  #   titleize("coffee w cream", small_words: ['w']) # => "Coffee w Cream"
+  #
+  # For strings in ALL CAPS, specify acronyms to be preserved in opts[:acronyms]
+  #
+  #   titleize("SMITH TO HEAD SEC", acronyms: ['SEC']) # => "Smith to Head SEC"
+  #
   def titleize(opts={})
     if defined? ActiveSupport::Inflector
       ActiveSupport::Inflector.titleize(self, opts)
     else
-      Titleize.titleize(self)
+      Titleize.titleize(self, opts)
     end
   end
   alias_method :titlecase, :titleize
 
-  def titleize!
-    replace(titleize)
+  def titleize!(opts={})
+    replace(titleize(opts))
   end
   alias_method :titlecase!, :titleize!
 end
@@ -114,19 +140,37 @@ if defined? ActiveSupport::Inflector
     # This replaces the default Rails titleize. Like the default, it uses
     # Inflector.underscore and Inflector.humanize to convert
     # underscored_names and CamelCaseNames to a more human form. However, you can change
-    # this behavior by passing :humanize => false or :underscore => false as options. 
+    # this behavior by passing :humanize => false or :underscore => false as options.
     # This can be useful when dealing with words like "iPod" and "GPS".
     #
     # titleize is also aliased as titlecase.
     #
     #   "notes on an active_record" # => "Notes on an Active Record"
     #   "the GoodGerman"            # => "The Good German"
+    #
+    # Pass additional small words in opts[:small_words]
+    #
+    #   titleize("coffee w cream", small_words: ['w']) # => "Coffee w Cream"
+    #
+    # For strings in ALL CAPS, acronyms specified in
+    # ActiveSupport::Inflector.inflections.acronyms will be properly
+    # capitalized. To override the set of acronyms used, pass in
+    # opts[:acronyms]
+    #
+    #   titleize("SMITH TO HEAD SEC", acronyms: ['SEC']) # => "Smith to Head SEC"
+    #
     def titleize(title, opts={})
       opts = {:humanize => true, :underscore => true}.merge(opts)
       title = ActiveSupport::Inflector.underscore(title) if opts[:underscore]
       title = ActiveSupport::Inflector.humanize(title) if opts[:humanize]
 
-      Titleize.titleize(title)
+      # prioritize passed-in acronyms, fall back to those configured
+      # for ActiveSupport::Inflector
+      opts[:acronyms] ||= ActiveSupport::Inflector.inflections.acronyms.values
+
+      passthru_opts = opts.select { |k, _| [:acronyms, :small_words].include?(k) }
+
+      Titleize.titleize(title, passthru_opts)
     end
     alias_method :titlecase, :titleize
   end

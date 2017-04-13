@@ -1,10 +1,14 @@
 # -*- coding: utf-8 -*-
-
 module ActiveSupport
   module Inflector
+    require 'ostruct'
+
     #stub
     def underscore(string) string; end
     def humanize(string)   string; end
+    def inflections
+      OpenStruct.new(acronyms: [])
+    end
   end
 end
 
@@ -102,11 +106,29 @@ describe Titleize do
       end
     end
 
+    it "should not capitalize custom small words specified in opts[:small_words]" do
+      titleize("first w last", small_words: ['w']).should == "First w Last"
+    end
+
     it "should not screw up acronyms" do
       titleize("the SEC's decision").should == "The SEC's Decision"
     end
 
-    it "should not capitalize words with dots" do 
+    context "handling acronyms" do
+      context "in a mixed-case string" do
+        it "should not screw up acronyms" do
+          titleize("the SEC's decision").should == "The SEC's Decision"
+        end
+      end
+
+      context "in an uppercase string with the acronyms option specified" do
+        it 'keeps the acronyms in upper case' do
+          titleize("SMITH TO HEAD SEC", acronyms: ['SEC']).should == "Smith to Head SEC"
+        end
+      end
+    end
+
+    it "should not capitalize words with dots" do
       titleize("del.icio.us web site").should == "del.icio.us Web Site"
     end
 
@@ -115,7 +137,7 @@ describe Titleize do
       titleize("ends with 'quotation.'").should == "Ends With 'Quotation.'"
     end
 
-    it "should not capitalize words that have a lowercase first letter" do 
+    it "should not capitalize words that have a lowercase first letter" do
       titleize("iTunes").should == "iTunes"
     end
 
@@ -263,7 +285,7 @@ describe ActiveSupport::Inflector do
     end
 
     it "should replace Inflector.titleize" do
-      Titleize.should_receive(:titleize).with(@title)
+      Titleize.should_receive(:titleize).with(@title, acronyms: [])
       ActiveSupport::Inflector.stub!(:underscore).and_return(@title)
       ActiveSupport::Inflector.stub!(:humanize).and_return(@title)
       ActiveSupport::Inflector.titleize(@title)
@@ -326,6 +348,12 @@ describe String do
       ActiveSupport::Inflector.should_not_receive(:humanize)
       "title".titleize(:humanize => false)
     end
+
+    it "should properly capitalize acronyms configured in Inflector.inflections.acronyms" do
+      inflections = double(acronyms: ['SEC'])
+      ActiveSupport::Inflector.stub!(:inflections).and_return(inflections)
+      "SMITH TO HEAD SEC".titleize.should == 'Smith to Head SEC'
+    end
   end
 
   context "when ActiveSupport is not loaded" do
@@ -338,7 +366,7 @@ describe String do
     end
 
     it "should call Titleize#titleize" do
-      Titleize.should_receive(:titleize).with("title")
+      Titleize.should_receive(:titleize).with("title", {})
       "title".titleize
     end
   end
